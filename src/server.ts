@@ -13,6 +13,7 @@ const pool = new Pool({
 })
 
 
+
 const initDB = async () => {
     try {
         await pool.query(`
