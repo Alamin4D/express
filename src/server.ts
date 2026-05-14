@@ -1,14 +1,15 @@
 import express, { type Application, type Request, type Response } from "express";
 import { Pool } from "pg";
+import config from "./config";
 const app: Application = express();
-const port = 5000;
+const port = config.port;
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
 const pool = new Pool({
-    connectionString: "postgresql://neondb_owner:npg_oSvscjaqOL13@ep-lingering-boat-aqsoqgb6-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    connectionString: config.connection_string,
 })
 
 
@@ -159,9 +160,8 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
     try {
         const result = await pool.query(`
             DELETE FROM users WHERE id = $1
-            RETURNING *
             `, [id])
-        if (result.rows.length === 0) {
+        if (result.rowCount === 0) {
             res.status(404).json({
                 success: false,
                 message: "User not found",
@@ -171,7 +171,6 @@ app.delete("/users/:id", async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "User deleted successfully!",
-            data: result.rows[0]
         })
     } catch (error: any) {
         res.status(500).json({
