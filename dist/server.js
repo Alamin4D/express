@@ -6,6 +6,8 @@ const port = config.port;
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+
 const pool = new Pool({
     connectionString: config.connection_string,
 });
