@@ -7,4 +7,5 @@ router.post("/", profileController.createProfile)
 router.get("/", profileController.getAllProfiles)
 router.get("/:id",profileController.getSingleProfile)
 
+
 export const profileRoute = router;
